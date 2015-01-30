@@ -1,0 +1,232 @@
+Elm.Main = Elm.Main || {};
+Elm.Main.make = function (_elm) {
+   "use strict";
+   _elm.Main = _elm.Main || {};
+   if (_elm.Main.values)
+   return _elm.Main.values;
+   var _op = {},
+   _N = Elm.Native,
+   _U = _N.Utils.make(_elm),
+   _L = _N.List.make(_elm),
+   _P = _N.Ports.make(_elm),
+   $moduleName = "Main",
+   $Basics = Elm.Basics.make(_elm),
+   $Color = Elm.Color.make(_elm),
+   $Easing = Elm.Easing.make(_elm),
+   $Graphics$Collage = Elm.Graphics.Collage.make(_elm),
+   $Graphics$Element = Elm.Graphics.Element.make(_elm),
+   $Graphics$Input = Elm.Graphics.Input.make(_elm),
+   $List = Elm.List.make(_elm),
+   $Signal = Elm.Signal.make(_elm),
+   $Time = Elm.Time.make(_elm),
+   $Transform2D = Elm.Transform2D.make(_elm);
+   var trimY = $Graphics$Collage.toForm($Graphics$Element.color($Color.black)(A2($Graphics$Element.spacer,
+   10,
+   820)));
+   var trimX = $Graphics$Collage.toForm($Graphics$Element.color($Color.black)(A2($Graphics$Element.spacer,
+   800,
+   10)));
+   var blankBordersY = $Graphics$Collage.toForm($Graphics$Element.color($Color.white)(A2($Graphics$Element.spacer,
+   200,
+   1000)));
+   var blankBordersX = $Graphics$Collage.toForm($Graphics$Element.color($Color.white)(A2($Graphics$Element.spacer,
+   1000,
+   400)));
+   var tile = A3($Graphics$Element.image,
+   175,
+   200,
+   "Fractal-Plane-Symmetry-Group-051.jpg");
+   var tiling = $Graphics$Collage.move({ctor: "_Tuple2"
+                                       ,_0: -59
+                                       ,_1: 0})($Graphics$Collage.toForm($Graphics$Element.flow($Graphics$Element.down)($List.repeat(4)($Graphics$Element.flow($Graphics$Element.right)(A2($List.repeat,
+   6,
+   tile))))));
+   var borders = _L.fromArray([$Graphics$Collage.move({ctor: "_Tuple2"
+                                                      ,_0: -280
+                                                      ,_1: 0})(trimY)
+                              ,$Graphics$Collage.move({ctor: "_Tuple2"
+                                                      ,_0: 280
+                                                      ,_1: 0})(trimY)
+                              ,$Graphics$Collage.move({ctor: "_Tuple2"
+                                                      ,_0: 0
+                                                      ,_1: -200})(trimX)
+                              ,$Graphics$Collage.move({ctor: "_Tuple2"
+                                                      ,_0: 0
+                                                      ,_1: 200})(trimX)
+                              ,$Graphics$Collage.move({ctor: "_Tuple2"
+                                                      ,_0: 385
+                                                      ,_1: 0})(blankBordersY)
+                              ,$Graphics$Collage.move({ctor: "_Tuple2"
+                                                      ,_0: -385
+                                                      ,_1: 0})(blankBordersY)
+                              ,$Graphics$Collage.move({ctor: "_Tuple2"
+                                                      ,_0: 0
+                                                      ,_1: -405})(blankBordersX)
+                              ,$Graphics$Collage.move({ctor: "_Tuple2"
+                                                      ,_0: 0
+                                                      ,_1: 405})(blankBordersX)]);
+   var updating = F2(function (delt,
+   total) {
+      return _U.eq(delt,
+      0) ? 0 : delt + total;
+   });
+   var Nill = {ctor: "Nill"};
+   var keys = $Signal.channel(Nill);
+   var symmetry = $Signal.subscribe(keys);
+   var isoButton = F3(function (_v0,
+   str,
+   k) {
+      return function () {
+         switch (_v0.ctor)
+         {case "_Tuple2":
+            return $Graphics$Collage.move({ctor: "_Tuple2"
+                                          ,_0: _v0._0
+                                          ,_1: _v0._1})($Graphics$Collage.toForm(A2($Graphics$Input.button,
+              A2($Signal.send,keys,k),
+              str)));}
+         _U.badCase($moduleName,
+         "between lines 108 and 110");
+      }();
+   });
+   var R6 = {ctor: "R6"};
+   var Ty = {ctor: "Ty"};
+   var Tx = {ctor: "Tx"};
+   var tButtons = _L.fromArray([A3(isoButton,
+                               {ctor: "_Tuple2"
+                               ,_0: 0
+                               ,_1: -225},
+                               "X Translate",
+                               Tx)
+                               ,A3(isoButton,
+                               {ctor: "_Tuple2"
+                               ,_0: -200
+                               ,_1: -225},
+                               "Y Translate",
+                               Ty)
+                               ,A3(isoButton,
+                               {ctor: "_Tuple2"
+                               ,_0: 200
+                               ,_1: -225},
+                               "Order 6 Rotation",
+                               R6)]);
+   var transform = F2(function (t,
+   k) {
+      return function () {
+         var quant = function () {
+            switch (k.ctor)
+            {case "Nill": return 0;
+               case "R6":
+               return $Basics.pi / 3;
+               case "Tx": return 1;
+               case "Ty": return 1;}
+            _U.badCase($moduleName,
+            "between lines 34 and 39");
+         }();
+         var adjustTime = function (t) {
+            return function () {
+               switch (k.ctor)
+               {case "R6": return _U.cmp(t,
+                    0.75 * $Time.second) < 0 ? A6($Easing.ease,
+                    $Easing.easeInQuart,
+                    $Easing.$float,
+                    0,
+                    quant / 2,
+                    0.75 * $Time.second,
+                    t) : _U.cmp(t,
+                    0.75 * $Time.second) > -1 && _U.cmp(t,
+                    1.5 * $Time.second) < 0 ? A6($Easing.ease,
+                    $Easing.easeOutQuart,
+                    $Easing.$float,
+                    (0 - quant) / 2,
+                    0,
+                    0.75 * $Time.second,
+                    t - 0.75 * $Time.second) : 0;}
+               return _U.cmp(t,
+               1.5 * $Time.second) < 0 ? A6($Easing.ease,
+               $Easing.easeOutQuart,
+               $Easing.$float,
+               0,
+               quant,
+               1.5 * $Time.second,
+               t) : 0;
+            }();
+         };
+         var basicLayout = function () {
+            switch (k.ctor)
+            {case "Nill":
+               return A2($List._op["::"],
+                 tiling,
+                 borders);
+               case "R6":
+               return A2($List._op["::"],
+                 $Graphics$Collage.groupTransform($Transform2D.rotation(adjustTime(t)))(_L.fromArray([tiling])),
+                 borders);
+               case "Tx":
+               return A2($List._op["::"],
+                 A2($Graphics$Collage.move,
+                 {ctor: "_Tuple2"
+                 ,_0: 175 / 2 * adjustTime(t)
+                 ,_1: 50 * adjustTime(t)},
+                 tiling),
+                 borders);
+               case "Ty":
+               return A2($List._op["::"],
+                 A2($Graphics$Collage.move,
+                 {ctor: "_Tuple2"
+                 ,_0: 0
+                 ,_1: 100 * adjustTime(t)},
+                 tiling),
+                 borders);}
+            _U.badCase($moduleName,
+            "between lines 48 and 53");
+         }();
+         return function () {
+            switch (t)
+            {case 0:
+               return A2($Graphics$Collage.collage,
+                 900,
+                 490)(A2($Basics._op["++"],
+                 basicLayout,
+                 tButtons));}
+            return A2($Graphics$Collage.collage,
+            900,
+            490)(basicLayout);
+         }();
+      }();
+   });
+   var view = F2(function (t,k) {
+      return _U.cmp(t,
+      1.7 * $Time.second) < 0 ? A2(transform,
+      t,
+      k) : A2(transform,0,Nill);
+   });
+   var main = A3($Signal.map2,
+   view,
+   A2($Signal.foldp,
+   updating,
+   0)($Time.fpsWhen(30)(A2($Time.since,
+   2 * $Time.second,
+   symmetry))),
+   symmetry);
+   _elm.Main.values = {_op: _op
+                      ,Tx: Tx
+                      ,Ty: Ty
+                      ,R6: R6
+                      ,Nill: Nill
+                      ,keys: keys
+                      ,symmetry: symmetry
+                      ,main: main
+                      ,updating: updating
+                      ,view: view
+                      ,transform: transform
+                      ,tButtons: tButtons
+                      ,borders: borders
+                      ,tile: tile
+                      ,tiling: tiling
+                      ,blankBordersX: blankBordersX
+                      ,blankBordersY: blankBordersY
+                      ,trimX: trimX
+                      ,trimY: trimY
+                      ,isoButton: isoButton};
+   return _elm.Main.values;
+};
